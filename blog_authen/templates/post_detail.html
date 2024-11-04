@@ -1,0 +1,46 @@
+<!-- templates/post_detail.html -->
+{% extends 'base.html' %}
+{% block content %}
+  <div>
+    <h2>{{post.title}}</h2>
+    <p>{{post.body}}</p>
+  </div>
+  <p><a href="{% url 'post_edit' post.pk %}">+ Edit Blog Post</a></p>
+    <p><a href="{% url 'post_delete' post.pk %}">+ Delete Blog Post</a></p>
+    <div>
+      {% comment for comment in post.post_comments.all %}
+      {% endcomment %}
+      {% for comment in comments %}
+        {% if comment.is_approved %}
+            <div>
+              <p><strong>Comment:</strong> {{ comment.comment_text }}</p>
+              <p><strong>User Rating:</strong> {{ comment.user_rating }}</p>
+              <p><strong>Date Created:</strong> {{ comment.date_created }}</p>
+              {% if comment.upload_pic %}
+              <img src="{{comment.upload_pic.url}}" alt="{{comment.date_created}}" width="10%" height="auto">
+              {% endif %}
+            </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div>
+      <span>
+          {% if comments.has_previous %}
+              <a href="?page=1">&laquo; first</a>
+              <a href="?page={{ comments.previous_page_number }}">previous</a>
+          {% endif %}
+  
+          <span>
+              Page {{ comments.number }} of {{ comments.paginator.num_pages }}.
+          </span>
+  
+          {% if comments.has_next %}
+              <a href="?page={{ comments.next_page_number }}">next</a>
+              <a href="?page={{ comments.paginator.num_pages }}">last &raquo;</a>
+          {% endif %}
+      </span>
+    </div>
+  {% endblock %}
+  
+  
+  
